@@ -1,6 +1,7 @@
 <?php
 namespace LauertBernd\JodelClientPHP\Commands;
 
+use LauertBernd\JodelClientPHP\JodelApi\Requester;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,5 +24,7 @@ class CreateUserCommand extends Command
             '============',
             '',
         ]);
+        $requester = new Requester();
+        $requester->createAccount();
     }
 }

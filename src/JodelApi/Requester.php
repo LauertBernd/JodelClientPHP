@@ -1,6 +1,8 @@
 <?php
 namespace LauertBernd\JodelClientPHP\JodelApi;
+
 use Requests;
+
 /**
  * Class Requester
  */
@@ -16,13 +18,27 @@ class Requester
             "device_uid" => $this->generateDeviceId(),
             "location" => $this->getLocation()->toArray());
         $url = self::APIURL . self::URL_USERREGISTER;
-        $header = array("Connection" => "keep-alive",
-            "Accept-Encoding" => "gzip",
-            "Content-Type" => "application/json; charset=UTF-8",
-            "User-Agent" => "Jodel/1.1 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)"
-        );
+        $signRequest = new Request();
+        $signRequest->setMethod('POST');
+        $signRequest->setPayload($payload);
+        $signRequest->setUrl($url);
+
+        $header = $signRequest->getSignHeaders();
         $payload = json_encode($payload);
-        Requests::post($url, $header, $payload);
+        var_dump($payload);
+        var_dump($header);
+        $result = Requests::post($url, $header, $payload);
+        switch($result->status_code){
+            case 477:
+                throw  new \Exception('Signing failed!');
+                break;
+            case 200:
+                $result = json_decode($result->body);
+                break;
+        }
+        return $result;
+
+
 
     }
 
