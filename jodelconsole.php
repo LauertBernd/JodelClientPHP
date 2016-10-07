@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 // command.php
-require_once __DIR__ . 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-use Acme\Tool\MyApplication;
+use Symfony\Component\Console\Application;
+use LauertBernd\JodelClientPHP\Commands\CreateUserCommand;
 
-$application = new MyApplication();
-$application->run();
+$app = new Application();
+$app->add(new CreateUserCommand());
+$app->run();
