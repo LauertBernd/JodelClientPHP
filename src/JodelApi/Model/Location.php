@@ -1,5 +1,5 @@
 <?php
-namespace LauertBernd\JodelClientPHP\JodelApi;
+namespace LauertBernd\JodelClientPHP\JodelApi\Model;
 class Location{
     /**
      * @var string

@@ -1,12 +1,14 @@
 <?php
 namespace LauertBernd\JodelClientPHP\Commands;
 
+use LauertBernd\JodelClientPHP\JodelApi\JodelManager;
+use LauertBernd\JodelClientPHP\JodelApi\Model\Location;
 use LauertBernd\JodelClientPHP\JodelApi\Requester;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateUserCommand extends Command
+class CreateUser extends Command
 {
     protected function configure()
     {
@@ -24,7 +26,12 @@ class CreateUserCommand extends Command
             '============',
             '',
         ]);
-        $requester = new Requester();
-        $requester->createAccount();
+        $location = new Location();
+        $location->setLat(48.148434);
+        $location->setLng(11.567867);
+        $location->setCityName('Munich');
+        $jodelManager = new JodelManager();
+        $account = $jodelManager->registerAccount($location);
+        var_dump($account);
     }
 }
