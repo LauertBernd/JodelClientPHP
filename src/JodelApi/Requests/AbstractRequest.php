@@ -6,18 +6,22 @@ use DateTime;
 
 abstract class AbstractRequest
 {
+    private $payLoad;
     CONST CLIENTID = '6a62f24e-7784-0226-3fffb-5e0e895aaaf';
     CONST APIURL = 'https://api.go-tellm.com/api';
 
     public function execute()
     {
+        $this->payLoad = json_encode($this->getPayload());
         $header = $this->getSignHeaders();
-        $payload = json_encode($this->getPayload());
         $url = $this->getFullUrl();
         $result = new \stdClass();
+        var_dump($url);
+        var_dump($header);
+        var_dump($this->payLoad);
         switch ($this->getMethod()) {
             case 'POST':
-                $result = Requests::post($url, $header, $payload);
+                $result = Requests::post($url, $header, $this->payLoad);
                 break;
             case 'GET':
                 break;
@@ -28,7 +32,7 @@ abstract class AbstractRequest
                 throw  new \Exception('Signing failed!');
                 break;
             case 200:
-                $result = json_decode($result->body);
+                $result = json_decode($result->body,true);
                 break;
             default:
                 throw  new \Exception('Unknown Error');
@@ -42,7 +46,8 @@ abstract class AbstractRequest
      */
     public function getSignHeaders()
     {
-        $headers = array("Connection" => "keep-alive",
+        $headers = array(
+            "Connection" => "keep-alive",
             "Accept-Encoding" => "gzip",
             "Content-Type" => "application/json; charset=UTF-8",
             "User-Agent" => "Jodel/1.1 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)"
@@ -62,7 +67,7 @@ abstract class AbstractRequest
             "",
             $timestamp,
             $url2,
-            json_encode($this->getPayload())];
+            $this->payLoad];
         $reqString = implode("%", $req);
 
 

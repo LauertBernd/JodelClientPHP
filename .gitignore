@@ -47,3 +47,5 @@ fabric.properties
 
 /vendor/
 /pyapi/
+/accountdata.json
+/composer.lock

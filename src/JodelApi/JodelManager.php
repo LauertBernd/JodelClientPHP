@@ -14,6 +14,8 @@ class JodelManager{
         $accountCreator->setLocation($location);
         $data = $accountCreator->execute();
         var_dump($data);
+        var_dump(json_encode($data));
+        var_dump($data);
         $account = new AccountData();
         return $account;
     }
