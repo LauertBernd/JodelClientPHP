@@ -63,14 +63,14 @@ class Location{
     }
     public function toArray(){
         return array(
-            "loc_accuracy" => 10.0,
             "city" => $this->getCityName(),
+            "country" => 'DE',
+            "loc_accuracy" => '0.0',
             "loc_coordinates" => array(
                 "lat" => $this->getLat(),
                 "lng" => $this->getLng(),
             ),
-            "country" => 'DE',
-            "name" => "41"
+            "name" => $this->getCityName()
         );
     }
 }

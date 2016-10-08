@@ -76,8 +76,9 @@ class Request
         );
         $timestamp = new DateTime();
         $timestamp = $timestamp->format(DateTime::ATOM);
-        $timestamp = substr($timestamp, 0, -7);
+        $timestamp = substr($timestamp, 0, -6);
         $timestamp .= "Z";
+
 
 
         $urlParts = parse_url($this->url);
@@ -90,11 +91,11 @@ class Request
             $timestamp,
             $url2,
             json_encode($this->payload)];
-        $reqString = implode("",$req);
+        $reqString = implode("%",$req);
 
-        //secret = bytearray([ord(c) for c in "bgulhzgo9876GFKgguzTZITFGMn879087vbgGFuz"])
+
+
         $secret = "bgulhzgo9876GFKgguzTZITFGMn879087vbgGFuz";
-        //signature = hmac.new(secret, "%".join(req).encode("utf-8"), sha1).hexdigest().upper()
         $signature = hash_hmac ( 'sha1' , $reqString , $secret );
         $signature = strtoupper($signature);
 
@@ -103,6 +104,8 @@ class Request
         $headers['X-Client-Type'] = 'wodel_1.1';
         $headers['X-Timestamp'] = $timestamp;
         $headers['X-Api-Version'] = '0.2';
+
         return $headers;
     }
+
 }

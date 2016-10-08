@@ -14,9 +14,12 @@ class Requester
 
     public function createAccount()
     {
-        $payload = array("client_id" => self::CLIENTID,
+
+        $payload = array(
+            "location" => $this->getLocation()->toArray(),
+            "client_id" => self::CLIENTID,
             "device_uid" => $this->generateDeviceId(),
-            "location" => $this->getLocation()->toArray());
+        );
         $url = self::APIURL . self::URL_USERREGISTER;
         $signRequest = new Request();
         $signRequest->setMethod('POST');
@@ -25,10 +28,8 @@ class Requester
 
         $header = $signRequest->getSignHeaders();
         $payload = json_encode($payload);
-        var_dump($payload);
-        var_dump($header);
         $result = Requests::post($url, $header, $payload);
-        switch($result->status_code){
+        switch ($result->status_code) {
             case 477:
                 throw  new \Exception('Signing failed!');
                 break;
@@ -36,15 +37,10 @@ class Requester
                 $result = json_decode($result->body);
                 break;
         }
+        var_dump($result);
         return $result;
 
 
-
-    }
-
-    public function generateDeviceId()
-    {
-        return hash('sha256', microtime());
     }
 
     /**
@@ -53,11 +49,26 @@ class Requester
     public function getLocation()
     {
         $location = new Location();
-        $location->setLat(50.1183);
-        $location->setLng(8.7011);
-        $location->setCityName('Frankfurt am Main');
+        $location->setLat(48.148434);
+        $location->setLng(11.567867);
+        $location->setCityName('Munich');
         return $location;
 
+    }
+
+    public function generateDeviceId()
+    {
+        return $this->random_str(64, 'abcdef0123456789');
+    }
+
+    function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {
+        $str = '';
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+            $str .= $keyspace[random_int(0, $max)];
+        }
+        return $str;
     }
 
 }
