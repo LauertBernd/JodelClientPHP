@@ -6,9 +6,16 @@ use DateTime;
 
 abstract class AbstractRequest
 {
-    private $payLoad;
-    CONST CLIENTID = '6a62f24e-7784-0226-3fffb-5e0e895aaaf';
+    CONST CLIENTID = '81e8a76e-1e02-4d17-9ba0-8a7020261b26';
     CONST APIURL = 'https://api.go-tellm.com/api';
+    const SECRET = "zQTjsuEvclFMwHxzCEPCtMzClaayFhcgmHtuMwTG";
+    const USERAGENT = "Jodel/4.4.9 Dalvik/2.1.0 (Linux; U; Android 5.1.1; )";
+    const CLIENT_TYPE = 'android_4.23.1';
+    /**
+     * @var string
+     */
+    protected $accessToken = null;
+    private $payLoad;
 
     public function execute()
     {
@@ -16,14 +23,21 @@ abstract class AbstractRequest
         $header = $this->getSignHeaders();
         $url = $this->getFullUrl();
         $result = new \stdClass();
+        if ($this->getAccessToken()) {
+            $header['Authorization'] = "Bearer " . $this->getAccessToken();
+        }
+
+        /* Comment out to debug the Request:
         var_dump($url);
         var_dump($header);
         var_dump($this->payLoad);
+        */
         switch ($this->getMethod()) {
             case 'POST':
                 $result = Requests::post($url, $header, $this->payLoad);
                 break;
             case 'GET':
+                $result = Requests::get($url, $header);
                 break;
         }
 
@@ -32,13 +46,15 @@ abstract class AbstractRequest
                 throw  new \Exception('Signing failed!');
                 break;
             case 200:
-                $result = json_decode($result->body,true);
+                $result = json_decode($result->body, true);
                 break;
             default:
                 throw  new \Exception('Unknown Error');
         }
         return $result;
     }
+
+    abstract function getPayload();
 
     /**
      * Gets Sign headers
@@ -50,7 +66,7 @@ abstract class AbstractRequest
             "Connection" => "keep-alive",
             "Accept-Encoding" => "gzip",
             "Content-Type" => "application/json; charset=UTF-8",
-            "User-Agent" => "Jodel/1.1 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)"
+            "User-Agent" => self::USERAGENT
         );
         $timestamp = new DateTime();
         $timestamp = $timestamp->format(DateTime::ATOM);
@@ -71,13 +87,13 @@ abstract class AbstractRequest
         $reqString = implode("%", $req);
 
 
-        $secret = "bgulhzgo9876GFKgguzTZITFGMn879087vbgGFuz";
+        $secret = self::SECRET;
         $signature = hash_hmac('sha1', $reqString, $secret);
         $signature = strtoupper($signature);
 
 
         $headers['X-Authorization'] = 'HMAC ' . $signature;
-        $headers['X-Client-Type'] = 'wodel_1.1';
+        $headers['X-Client-Type'] = self::CLIENT_TYPE;
         $headers['X-Timestamp'] = $timestamp;
         $headers['X-Api-Version'] = '0.2';
 
@@ -93,5 +109,19 @@ abstract class AbstractRequest
 
     abstract function getMethod();
 
-    abstract function getPayload();
+    /**
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * @param string $accessToken
+     */
+    public function setAccessToken(string $accessToken)
+    {
+        $this->accessToken = $accessToken;
+    }
 }
