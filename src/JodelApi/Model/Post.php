@@ -36,13 +36,13 @@ class Post
         return $this->rawData['user_handle'];
     }
 
+    /**
+     * @return DateTime
+     */
     public function getCreatedAt()
     {
-
-        return DateTime::createFromFormat(
-            DateTime::ISO8601,
-            $this->rawData['created_at']
-        );
+        $dateTime = new DateTime($this->rawData['created_at']);
+        return $dateTime;
     }
 
 
