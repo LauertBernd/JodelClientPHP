@@ -25,7 +25,25 @@ class GetPosts extends Command
         $jodelManager = new JodelManager();
         $accountData = new AccountData();
         $accountData->setAccessToken($input->getArgument('accesstoken'));
-        $posts = $jodelManager->getPosts($accountData);
-        var_dump($posts);
+        $jodelManager->setAccountData($accountData);
+        $posts = $jodelManager->getPostsWithComments();
+        foreach($posts as $post){
+            $output->writeln("################");
+            $output->writeln("---------------");
+            $str = sprintf('%s : %s',$post->getId(),$post->getText());
+            $output->writeln($str);
+            $output->writeln("---------------");
+
+            $comments = $post->getChildren();
+            foreach($comments as $comment){
+                $output->writeln("Kommentar:".$comment->getText());
+            }
+
+
+            $output->writeln("################");
+
+
+        }
+        //var_dump($posts);
     }
 }
