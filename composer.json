@@ -3,7 +3,7 @@
   "description": "Jodel Client in PHP",
   "require": {
     "php": ">=5.3.3",
-    "symfony/console": "3.1.x-dev",
+    "symfony/console": "3.1",
     "rmccue/requests": "^1.6"
   },
   "autoload": {
