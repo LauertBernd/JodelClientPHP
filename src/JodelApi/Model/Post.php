@@ -1,5 +1,8 @@
 <?php
 namespace LauertBernd\JodelClientPHP\JodelApi\Model;
+
+use DateTime;
+
 class Post
 {
     protected $rawData;
@@ -8,11 +11,38 @@ class Post
     {
         $this->rawData = $rawData;
     }
-    public function getText(){
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
         return $this->rawData["message"];
     }
-    public function getId(){
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
         return $this->rawData['post_id'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->rawData['user_handle'];
+    }
+
+    public function getCreatedAt()
+    {
+
+        return DateTime::createFromFormat(
+            DateTime::ISO8601,
+            $this->rawData['created_at']
+        );
     }
 
 
