@@ -26,11 +26,12 @@ class GetPosts extends Command
         $accountData = new AccountData();
         $accountData->setAccessToken($input->getArgument('accesstoken'));
         $jodelManager->setAccountData($accountData);
-        $posts = $jodelManager->getPostsWithComments();
+        $posts = $jodelManager->getPostsWithComments(JodelManager::POSTS_NEWEST);
         foreach($posts as $post){
             $output->writeln("################");
             $output->writeln("---------------");
             $str = sprintf('%s : %s',$post->getId(),$post->getText());
+            var_dump($post->getCreatedAt()->getTimestamp());
             $output->writeln($str);
             $output->writeln("---------------");
 
