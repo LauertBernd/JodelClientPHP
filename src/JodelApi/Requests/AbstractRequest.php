@@ -1,6 +1,8 @@
 <?php
 namespace LauertBernd\JodelClientPHP\JodelApi\Requests;
 
+use LauertBernd\JodelClientPHP\JodelApi\Exceptions\SigningError;
+use LauertBernd\JodelClientPHP\JodelApi\Exceptions\StatusError;
 use Requests;
 use DateTime;
 
@@ -43,13 +45,13 @@ abstract class AbstractRequest
 
         switch ($result->status_code) {
             case 477:
-                throw  new \Exception('Signing failed!');
+                throw  new SigningError('Signing failed!');
                 break;
             case 200:
                 $result = json_decode($result->body, true);
                 break;
             default:
-                throw  new \Exception('Unknown Error');
+                throw  new StatusError('Status Error', 0, null, $result);
         }
         return $result;
     }
