@@ -45,5 +45,17 @@ class Post
         return $dateTime;
     }
 
+    public function getImageURL()
+    {
+        return "http:".$this->rawData['image_url'];
+    }
+    public function hasImage(){
+        return isset($this->rawData['image_url']);
+    }
+
+    public function getThumbnailURL()
+    {
+        return "http:".$this->rawData['thumbnail_url'];
+    }
 
 }

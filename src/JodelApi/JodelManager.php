@@ -7,9 +7,10 @@ use LauertBernd\JodelClientPHP\JodelApi\Model\Location;
 use LauertBernd\JodelClientPHP\JodelApi\Model\Post;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\CreateUserRequest;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\GetDetails;
+use LauertBernd\JodelClientPHP\JodelApi\Requests\GetImage;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\GetNewPosts;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\GetPosts;
-
+use Requests;
 class JodelManager
 {
     const POSTS_NORMAL = 1;
@@ -111,5 +112,11 @@ class JodelManager
         //die();
         $detailPost = new DetailPost($data);
         return $detailPost;
+    }
+
+    public function getImageBinary(Post $post){
+        $result = Requests::get($post->getImageURL());
+        //var_dump($result);
+        return $result->body;
     }
 }
