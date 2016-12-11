@@ -48,6 +48,9 @@ class JodelManager
 
         return $account;
     }
+    public function renewAccount(AccountData $accountData){
+
+    }
 
     /**
      * @return DetailPost[]

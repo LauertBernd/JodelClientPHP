@@ -5,11 +5,12 @@ class StatusError extends \Exception
 {
     protected $result;
 
-    public function __construct($message, $code, Exception $previous, $result)
+    public function __construct($message, $code, \Exception $previous = null, $result)
     {
         parent::__construct($message, $code, $previous);
         $this->result = $result;
     }
+
 
     /**
      * @return mixed

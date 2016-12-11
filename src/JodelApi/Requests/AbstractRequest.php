@@ -1,6 +1,7 @@
 <?php
 namespace LauertBernd\JodelClientPHP\JodelApi\Requests;
 
+use LauertBernd\JodelClientPHP\JodelApi\Exceptions\AuthError;
 use LauertBernd\JodelClientPHP\JodelApi\Exceptions\SigningError;
 use LauertBernd\JodelClientPHP\JodelApi\Exceptions\StatusError;
 use Requests;
@@ -46,6 +47,9 @@ abstract class AbstractRequest
         switch ($result->status_code) {
             case 477:
                 throw  new SigningError('Signing failed!');
+                break;
+            case 401:
+                throw new AuthError('AuthError');
                 break;
             case 200:
                 $result = json_decode($result->body, true);

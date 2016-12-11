@@ -3,29 +3,7 @@ namespace LauertBernd\JodelClientPHP\JodelApi\Requests;
 use LauertBernd\JodelClientPHP\JodelApi\Model\AccountData;
 use LauertBernd\JodelClientPHP\JodelApi\Model\Location;
 
-class CreateUserRequest extends AbstractRequest {
-
-    /**
-     * @var Location
-     */
-    protected $location;
-
-    /**
-     * @return Location
-     */
-    public function getLocation(): Location
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param Location $location
-     */
-    public function setLocation(Location $location)
-    {
-        $this->location = $location;
-    }
-
+class CreateUserRequest extends RenewAllTokens {
 
 
 
@@ -43,25 +21,11 @@ class CreateUserRequest extends AbstractRequest {
         }
         return $str;
     }
-
-    function getApiEndPoint()
+    /**
+     * @return string
+     */
+    public function getDeviceId()
     {
-        return '/v2/users';
+        return $this->generateDeviceId();
     }
-
-
-    function getPayload()
-    {
-        return array(
-            "location" => $this->getLocation()->toArray(),
-            "client_id" => self::CLIENTID,
-            "device_uid" => $this->generateDeviceId(),
-        );
-    }
-
-    function getMethod()
-    {
-        return 'POST';
-    }
-
 }
