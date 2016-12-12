@@ -32,6 +32,9 @@ class CreateUser extends Command
         $location->setCityName('Munich');
         $jodelManager = new JodelManager();
         $account = $jodelManager->registerAccount($location);
+        var_dump($account);
+        file_put_contents("account.json",$account->jsonSerialize());
+
 
     }
 }

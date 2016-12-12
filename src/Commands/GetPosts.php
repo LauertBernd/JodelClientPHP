@@ -14,8 +14,7 @@ class GetPosts extends Command
         $this
             ->setName('getposts')
             ->setDescription('Gets new Posts')
-            ->setHelp("gets new Posts")
-            ->addArgument('accesstoken', InputArgument::REQUIRED, 'Accesstoken');
+            ->setHelp("gets new Posts");
 
     }
 
@@ -24,7 +23,10 @@ class GetPosts extends Command
 
         $jodelManager = new JodelManager();
         $accountData = new AccountData();
-        $accountData->setAccessToken($input->getArgument('accesstoken'));
+        $accountData->loadFromJson(file_get_contents("account.json"));
+
+
+
         $jodelManager->setAccountData($accountData);
         $posts = $jodelManager->getPostsWithComments(JodelManager::POSTS_NORMAL);
         foreach($posts as $post){

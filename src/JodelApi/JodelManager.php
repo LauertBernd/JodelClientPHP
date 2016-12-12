@@ -37,11 +37,18 @@ class JodelManager
     public function registerAccount(Location $location)
     {
 
-        $accountCreator = new CreateUserRequest();
-        $accountCreator->setLocation($location);
-        $data = $accountCreator->execute();
-        var_dump($data);
+        $request = new CreateUserRequest();
+        $request->setLocation($location);
+        $data = $request->execute();
+
+
+        //var_dump($data);
+        //var_dump($request);
         $account = new AccountData();
+        $account->setAccessToken($data['access_token']);
+        $account->setDeviceUid($request->getDeviceId());
+        $account->setDistinctId($data['distinct_id']);
+        $account->setRefreshToken($data['refresh_token']);
         //$account->setAccessToken('')
         // TODO : Fill Data to the Account
 

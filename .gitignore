@@ -49,3 +49,4 @@ fabric.properties
 /pyapi/
 /accountdata.json
 /composer.lock
+/account.json

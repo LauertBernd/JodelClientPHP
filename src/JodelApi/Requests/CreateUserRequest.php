@@ -5,6 +5,10 @@ use LauertBernd\JodelClientPHP\JodelApi\Model\Location;
 
 class CreateUserRequest extends RenewAllTokens {
 
+    public function __construct()
+    {
+        $this->setDeviceId($this->generateDeviceId());
+    }
 
 
     public function generateDeviceId()
@@ -21,11 +25,5 @@ class CreateUserRequest extends RenewAllTokens {
         }
         return $str;
     }
-    /**
-     * @return string
-     */
-    public function getDeviceId()
-    {
-        return $this->generateDeviceId();
-    }
+
 }

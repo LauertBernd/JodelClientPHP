@@ -1,6 +1,6 @@
 <?php
 namespace LauertBernd\JodelClientPHP\JodelApi\Model;
-class AccountData
+class AccountData implements \JsonSerializable
 {
     /**
      * @var string
@@ -101,5 +101,21 @@ class AccountData
     public function setDeviceUid(string $deviceUid)
     {
         $this->deviceUid = $deviceUid;
+    }
+
+
+    function jsonSerialize()
+    {
+        return json_encode(get_object_vars($this),JSON_PRETTY_PRINT);
+    }
+    function loadFromJson(string $data){
+        $data = json_decode($data);
+        foreach($data as $key => $val)
+        {
+            if(property_exists(__CLASS__,$key))
+            {
+                $this->$key =  $val;
+            }
+        }
     }
 }
