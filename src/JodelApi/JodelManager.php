@@ -6,6 +6,7 @@ use LauertBernd\JodelClientPHP\JodelApi\Model\DetailPost;
 use LauertBernd\JodelClientPHP\JodelApi\Model\Location;
 use LauertBernd\JodelClientPHP\JodelApi\Model\Post;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\CreateUserRequest;
+use LauertBernd\JodelClientPHP\JodelApi\Requests\GetChannel;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\GetDetails;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\GetImage;
 use LauertBernd\JodelClientPHP\JodelApi\Requests\GetNewPosts;
@@ -17,6 +18,7 @@ class JodelManager
     const POSTS_LOUDEST = 2;
     const POSTS_NEWEST = 3;
     const POSTS_MOSTDISCUSSED = 4;
+    const POSTS_CHANNEL = 5;
 
     /**
      * @var AccountData
@@ -85,14 +87,28 @@ class JodelManager
             case self::POSTS_NORMAL:
                 $request = new GetPosts();
                 break;
+            case self::POSTS_CHANNEL:
+                $request = new GetChannel();
+                break;
+
             default:
                 throw new \Exception('Unknown Posts Type');
         }
 
         $request->setAccessToken($this->accountData->getAccessToken());
         $data = $request->execute();
+        if(isset($data['posts'])){
+            $dataPosts = $data['posts'];
+        }
+        if(isset($data['recent'])){
+            $dataPosts = $data['recent'];
+        }
+
+        //var_dump($data);
         $posts = array();
-        foreach ($data['posts'] as $postData) {
+
+
+        foreach ($dataPosts as $postData) {
             $posts[] = new Post($postData);
             //var_dump($postData);
         }
